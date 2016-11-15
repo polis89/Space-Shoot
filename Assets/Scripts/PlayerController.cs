@@ -9,12 +9,14 @@ public class PlayerController : MonoBehaviour {
 	public Boundary boundary;
 	public float fireRate;
 
-	private Rigidbody rigitbody;
+	private Rigidbody rigitbodyObj;
+	private AudioSource audio;
 	private float nextFire = 0.0f;
 
 	// Use this for initialization
 	void Start () {
-		rigitbody = GetComponent<Rigidbody>();
+		rigitbodyObj = GetComponent<Rigidbody>();
+		audio = GetComponent<AudioSource> ();
 	}
 
 	void Update(){
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour {
 			nextFire = Time.time + fireRate;
 			//GameObject clone = 
 			Instantiate (shot, shotSpawnTransform.position, shotSpawnTransform.rotation);// as GameObject;
+			audio.Play();
 		}
 	}
 
@@ -30,13 +33,13 @@ public class PlayerController : MonoBehaviour {
 		float moveVertical = Input.GetAxis ("Vertical");
 
 		Vector3 vector = new Vector3 (moveHorisontal, 0.0f, moveVertical);
-		rigitbody.velocity = vector * speed;
-		rigitbody.position = new Vector3 (
-			Mathf.Clamp(rigitbody.position.x, boundary.xMin, boundary.xMax), 
+		rigitbodyObj.velocity = vector * speed;
+		rigitbodyObj.position = new Vector3 (
+			Mathf.Clamp(rigitbodyObj.position.x, boundary.xMin, boundary.xMax), 
 			0.0f, 
-			Mathf.Clamp(rigitbody.position.z, boundary.yMin, boundary.yMax)
+			Mathf.Clamp(rigitbodyObj.position.z, boundary.yMin, boundary.yMax)
 		);
-		rigitbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigitbody.velocity.x * -tilt);
+		rigitbodyObj.rotation = Quaternion.Euler (0.0f, 0.0f, rigitbodyObj.velocity.x * -tilt);
 	}
 }
 
